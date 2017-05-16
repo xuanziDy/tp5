@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <eq name="cinema_type" value="4">
+            <title>酒店后台管理系统</title>
+        <else />
+            <title>影院后台管理系统</title>
+        </eq>
+		<if condition="2 EQ $system_platform">
+			<link rel="stylesheet" href="__PUBLIC__/admin/css/login_zcsy.css" />
+		<else/>
+			<link rel="stylesheet" href="__PUBLIC__/admin/css/login.css" />
+		</if>
+        <script src="__PUBLIC__/admin/js/jquery.min.js"></script>
+        <script language="javascript" src="__PUBLIC__/admin/js/backend.js"></script>
+        <!--<eq name="cinema_type" value="4">-->
+    		<!--<link rel="icon" href="/favicon-xs.ico" type="image/x-icon" />-->
+		<!--<elseif condition="2 EQ $system_platform" />-->
+			<!--<link rel="icon" href="/favicon_zcsy.ico" type="image/x-icon" />-->
+        <!--<else />-->
+    		<!--<link rel="icon" href="/favicon.ico" type="image/x-icon" />-->
+        <!--</eq>-->
+    </head>
+    <body id="login-page">
+        <div id="main-content">
+
+            <!-- 主体 -->
+            <div class="login-body">
+                <div class="login-main pr">
+                    <form action="{:U('Login/index')}" method="post" class="login-form">
+                        <h3 class="welcome">
+                            <!--<eq name="cinema_type" value="4">-->
+                                <!--<i class="login-logo login-logo-xs"></i>酒店后台管理系统-->
+                            <!--<else />-->
+                                <!--<i class="login-logo"></i><span class="system_title">影院后台管理系统</span>-->
+                            <!--</eq>-->
+                        </h3>
+                        <div id="itemBox" class="item-box">
+                            <div class="item">
+                                <i class="icon-login-user"></i>
+                                <input type="text" name="user_name" id="user_name" placeholder="请填写用户名" autocomplete="off" />
+                            </div>
+                            <span class="placeholder_copy placeholder_un">请填写用户名</span>
+                            <div class="item b0">
+                                <i class="icon-login-pwd"></i>
+                                <input type="password" name="password" id="password" placeholder="请填写密码" autocomplete="off" />
+                            </div>
+                            <span class="placeholder_copy placeholder_pwd">请填写密码</span>
+							<!--
+                            <div class="item verifycode">
+                                <i class="icon-login-verifycode"></i>
+                                <input type="text" name="verify" id="verify" placeholder="请填写验证码" autocomplete="off">
+                                <a class="reloadverify" title="换一张" href="javascript:void(0)">换一张？</a>
+                            </div>
+                            <span class="placeholder_copy placeholder_check">请填写验证码</span>
+                            <div>
+                                <img class="verifyimg reloadverify" alt="点击切换" src="{:U('Common/verify')}">
+                            </div>
+							-->
+                        </div>
+                        <div class="login_btn_panel">
+                            <button class="login-btn" type="submit">
+                                <span class="in"><i class="icon-loading"></i>登 录 中 ...</span>
+                                <span class="on">登 录</span>
+                            </button>
+                            <div class="check-tips"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="hotel_flag" style="display: none"><?php echo setlogo();?></div>
+    <script type="text/javascript">
+		cinema_type = {$cinema_type};
+	   if(cinema_type==4){
+        	var url = '{:U("XsIndex/index")}';// 20160112 copy.he 修改小帅后台登陆首页地址
+		}else{
+			var url = '{:U("Index/index")}';
+		}
+        $(function(){
+            //20160805 dy  展示不同渠道的logo
+            var hotel_flag=$('#hotel_flag').html();
+            var html,link='';
+            if(hotel_flag !=='' || hotel_flag !== null || hotel_flag !==undefined){
+                html='<i class="login-logo" style="background: url(/Public/admin/image/'+hotel_flag+'-login.png) no-repeat 0 0 ;background-size: 100%;"></i>酒店后台管理系统';
+                link='<link rel="icon" href="/favicon-'+hotel_flag+'.ico" type="image/x-icon" />';
+            }else{
+                html='<i class="login-logo"></i><span class="system_title">影院后台管理系统</span>';
+                if({$system_platform}==2){
+                    link='<link rel="icon" href="/favicon_zcsy.ico" type="image/x-icon" />';
+                }else{
+                    link='<link rel="icon" href="/favicon.ico" type="image/x-icon" />';
+                }
+            }
+            $('.welcome').append(html);
+            $('head').append(link);
+        });
+    	/* 登陆表单获取焦点变色 */
+    	$(".login-form").on("focus", "input", function(){
+            $(this).closest('.item').addClass('focus');
+        }).on("blur","input",function(){
+            $(this).closest('.item').removeClass('focus');
+        });
+
+    	//表单提交
+    	$(document).ajaxStart(function(){
+            $("button:submit").addClass("log-in").attr("disabled", true);
+        }).ajaxStop(function(){
+            $("button:submit").removeClass("log-in").attr("disabled", false);
+        });
+
+    	$("form").submit(function(){
+    		var self = $(this);
+    		$.post(self.attr("action"), self.serialize(), success, "json");
+    		return false;
+    		function success(data){
+    			if(1 == data.status_code){
+    				window.location.href = url;
+    			} else {
+    				self.find(".check-tips").text(data.status_message);
+    				//刷新验证码
+    				$(".reloadverify").click();
+					//清空账号，密码输入框
+					$("#password").val('');
+					//$("#verify").val('');
+    			}
+    		}
+    	});
+
+		$(function(){
+			//初始化选中用户名输入框
+			$("#itemBox").find("input[name=username]").focus();
+			//刷新验证码
+			var verifyimg = $(".verifyimg").attr("src");
+            $(".reloadverify").click(function(){
+                if( verifyimg.indexOf('?')>0){
+                    $(".verifyimg").attr("src", verifyimg+'&random='+Math.random());
+                }else{
+                    $(".verifyimg").attr("src", verifyimg.replace(/\?.*$/,'')+'?'+Math.random());
+                }
+            });
+
+            //placeholder兼容性
+            //如果支持 
+            function isPlaceholer(){
+                var input = document.createElement('input');
+                return "placeholder" in input;
+            }
+            
+            //如果不支持
+            if(!isPlaceholer()){
+                $(".placeholder_copy").css({
+                    display:'block'
+                })
+                $("#itemBox input").keydown(function(){
+                    $(this).parents(".item").next(".placeholder_copy").css({
+                        display:'none'
+                    })                    
+                })
+                $("#itemBox input").blur(function(){
+                    if($(this).val()==""){
+                        $(this).parents(".item").next(".placeholder_copy").css({
+                            display:'block'
+                        })                      
+                    }
+                })
+            }
+		});
+		
+		$(document).ready(function(){
+			if ('网吧系统' == '{$other_setting.cinema_name}') {
+				$('.system_title').html('网吧后台管理系统');
+			}
+		});
+    </script>
+</body>
+</html>

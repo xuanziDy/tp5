@@ -1,0 +1,88 @@
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Plugin/uploadify/uploadify.css">
+<script type="text/javascript" src="__PUBLIC__/Plugin/uploadify/jquery.uploadify.min.js"></script>
+
+<div class="col-sm-12 widget-container-span">
+    <div class="widget-box transparent">
+        <include file="_tab"/>
+
+        <div class="widget-body">
+            <div class="widget-main padding-12 no-padding-left no-padding-right">
+                <div class="tab-content padding-4">
+                    <div id="home2" class="tab-pane in active">
+                        <form class="form-horizontal ajax" enctype="multipart/form-data" id="myform" action="{:U('Admin/Index/customer')}">
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="tab-pane active">
+                                        <table cellpadding="2" cellspacing="2" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td>图标代码:</td>
+                                                <td>
+                                                    <textarea id="html" name="notification" rows="15" cols="80" placeholder="请直接粘贴live800上面的图标代码">{$info.notification} </textarea>
+
+                                                    <span id="error_html" style="color: red;padding-left:5px;"></span>
+
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>功能代码:</td>
+                                                <td>
+                                                    <textarea id="js" name="theme" rows="15" cols="80" placeholder="请直接粘贴live800上面的功能代码">{$info.theme} </textarea>
+                                                    <span id="error_js" style="color: red;padding-left:5px;"></span>
+
+                                                </td>
+                                            </tr>
+
+                                      </tbody>
+                                      </table>
+                            </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary btn_submit J_ajax_submit_btn" >提交</button>
+                    <a class="btn" href="{:U('customer')}">取消</a>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+    /**
+     *  提交表单前，验证数据的合法性
+     */
+    function checkData(){
+
+
+        var html_flag=false;
+        var html =  $('#html').val();
+        html = $.trim(html);
+        if(html == null || html == ''){
+            $('#error_html').html('图标代码不能为空');
+        }else{
+            $('#error_html').html('');
+            html_flag=true;
+        }
+
+        var js_flag=false;
+        var js =  $('#js').val();
+        js = $.trim(js);
+        if(js == null || js == ''){
+            $('#error_js').html('功能代码不能为空');
+        }else{
+            $('#error_js').html('');
+            js_flag=true;
+        }
+
+
+        if(html_flag && js_flag){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+</script>
+

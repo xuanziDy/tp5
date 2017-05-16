@@ -1,0 +1,175 @@
+<style>
+    #user-table td {
+        vertical-align: middle;
+    }
+    .btn-reset{
+        border-width: 4px;
+        font-size: 13px;
+        line-height: 1.39;
+        padding: 4px 9px;
+    }
+</style>
+<div class="col-sm-12 widget-container-span">
+    <div class="" style="margin-top:20px;">
+        <form class="form-search" action="" method="get">
+            <input type="hidden" name="m" value="Admin">
+            <input type="hidden" name="c" value="User">
+            <input type="hidden" name="a" value="index">
+            <input type="hidden" name="sflag" value="1">
+            <div class="row">
+
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="5%" align="right">用户名：</td>
+                        <td width="10%"><input type="text" placeholder="用户名" name="search" value="{$search}" class="form-control search-query"></td>
+                        <td width="20%">
+                            &nbsp;<button class="btn btn-purple btn-sm" type="submit">
+                                <span class="ace-icon fa fa-search icon-on-right bigger-110"></span>搜索
+                            </button>
+                            <a href="javascript:;"  class="btn btn-purple btn-reset" onclick="location.href='{:U("User/index")}'">清空</a>
+                        </td>
+                        <td width="10%">&nbsp;</td>
+                    </tr>
+                </table>
+            </div>
+        </form>
+    </div>
+    <div class="widget-box transparent">
+        <include file="_tab" />
+
+        <div class="widget-body">
+            <div class="widget-main padding-12 no-padding-left no-padding-right">
+                <div class="tab-content padding-4">
+                    <div id="home1" class="tab-pane in active">
+                        <div class="row">
+                            <div class="col-xs-12 no-padding-right">
+                                <div class="table-responsive">
+                                    <table id="user-table" class="table table-striped table-bordered table-hover ">
+                                        <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>用户名</th>
+                                            <th>联系电话</th>
+                                            <th>注册时间</th>
+                                            <th>备注</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        <volist name="data" id="vo" key="k">
+                                            <tr>
+                                                <td>{$vo.uid}</td>
+                                                <td>{$vo.username}</td>
+                                                <td>{$vo.phone}</td>
+                                                <td>{$vo.ctime|date="Y-m-d H:i:s", ###}</td>
+                                                <td>{$vo.rcremark}</td>
+                                                <td>
+                                                    <a href="{:U('Admin/User/edit', array('uid'=>$vo['uid']))}" class="btn btn-white btn-sm">修改</a>
+                                                    <a data-uid="{$vo['uid']}"  class="ajax_del btn btn-white btn-sm">删除</a>
+                                                </td>
+                                            </tr>
+                                        </volist>
+                                        </tbody>
+                                    </table>
+                                    <div style="margin:0px;">
+                                        {$html}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    $("a.ajax_del").click(function(){
+        var uid = $(this).attr('data-uid');
+        $.ajax({
+            url: "{:U('Admin/User/del')}",
+            type:"post",
+            data: { uid:uid },
+            dataType: 'json',
+            success:function(data,status,xhr){
+                if (data.error_code) {
+                    swal({
+                        title: 'Error',
+                        text: data.message,
+                        type: "error",
+                    })
+                } else {
+                    swal({
+                            title: "Ok",
+                            text: data.message,
+                            type: "success",
+                            timer: 500,
+                        },
+                        function(){
+                            location.href = data.url;
+                        });
+                }
+            },
+        });
+        return false;
+    });
+
+
+    var _proccess_timer  = '';
+    $("a.sync_user").click(function(){
+        var _this = $("a.sync_user");
+        if(_this.attr('disabled')) {
+            return false;
+        };
+
+        $.ajax({
+            url: "{:U('Admin/User/syncUser')}",
+            type:"get",
+            dataType: 'json',
+            beforeSend: function(xhr){
+                _proccess_timer = setTimeout("get_process()", 1000);
+                $("#process").show();
+                _this.attr('disabled',1);
+            },
+            success:function(data,status,xhr){ },
+        });
+        return false;
+    });
+
+    function get_process()
+    {
+        $.ajax({
+            url: "{:U('Admin/User/getSyncProcess')}",
+            type:"get",
+            dataType: 'json',
+            success:function(data,status,xhr){
+                //结束
+                if (data.error_code) {
+                    clearTimeout(_proccess_timer);
+                    $("a.sync_user").removeAttr('disabled');
+                    $("#process").hide();
+
+                    swal({
+                            title: "Ok",
+                            text: data.message,
+                            type: "success",
+                            timer: 500,
+                        },
+                        function(){
+                            location.href = data.url;
+                        });
+
+                } else {
+                    //更新进度
+                    var total = data.data.total;
+                    var percent = data.data.percent;
+                    $("#sync_total").html(total);
+                    $("#sync_precent").html(percent);
+                    _proccess_timer = setTimeout("get_process()", 1000);
+                }
+            },
+        });
+    }
+</script>

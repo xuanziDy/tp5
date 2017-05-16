@@ -1,0 +1,97 @@
+<script type="text/javascript">
+    window.UEDITOR_HOME_URL ="/Public/Plugin/ueditor/";
+</script>
+<!-- 编辑器配置文件 -->
+<script type="text/javascript" src="/Public/Plugin/ueditor/ueditor.config.js"></script>
+<!-- 编辑器源码文件 -->
+<script type="text/javascript" src="/Public/Plugin/ueditor/ueditor.all.js"></script>
+
+
+<div class="col-sm-12 widget-container-span">
+    <div class="widget-box transparent">
+        <include file="_tab" />
+
+        <div class="widget-body">
+            <div class="widget-main padding-12 no-padding-left no-padding-right">
+                <div class="tab-content padding-4">
+                    <div class="tab-pane in active">
+                        <form  class="form-horizontal ajax"  id="myform" action="{:U('Admin/Index/saveInfo')}">
+
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="tab-pane active">
+                                        <table cellpadding="2" cellspacing="2" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td>公司介绍:</td>
+                                                <td>
+                                                    <input type="hidden" name="status" value="2">
+                                                    <input type="hidden" name="id" value="{$id}">
+                                                    <textarea  name="notification" id="ueditor" class="col-sm-10 " style="width:640px;height:240px;">{$notification|html_entity_decode}</textarea>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <button class="btn btn-primary btn_submit J_ajax_submit_btn" >提交</button>
+                                <a class="btn" href="{:U('Admin/Index/index')}">返回</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--注册百度ueditor-->
+<script type="text/javascript">
+
+
+    var ue = UE.getEditor('ueditor',{
+        toolbars: [
+            ['fullscreen', 'source', '|', 'undo', 'redo', '|',
+                'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'removeformat', 'formatmatch', 'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc', '|',
+                'rowspacingtop', 'rowspacingbottom', 'lineheight', '|',
+                'customstyle', 'paragraph', 'fontfamily', 'fontsize', '|',
+                'directionalityltr', 'directionalityrtl', 'indent', '|',
+                'justifyleft', 'justifycenter', 'justifyright', 'justifyjustify', '|', 'touppercase', 'tolowercase', '|',
+                'link', 'unlink', 'anchor', '|', 'imagenone', 'imageleft', 'imageright', 'imagecenter', '|',
+                'simpleupload', 'insertimage', 'emotion', 'scrawl', 'insertvideo', 'music', 'attachment', 'map', 'gmap', 'insertframe', 'insertcode', 'webapp', 'pagebreak', 'template', 'background', '|',
+                'horizontal', 'date', 'time', 'spechars', 'snapscreen', 'wordimage', '|',
+                'inserttable', 'deletetable', 'insertparagraphbeforetable', 'insertrow', 'deleterow', 'insertcol', 'deletecol', 'mergecells', 'mergeright', 'mergedown', 'splittocells', 'splittorows', 'splittocols', 'charts', '|',
+                'print', 'preview', 'searchreplace', 'drafts', 'help'
+            ]           ],
+        autoHeightEnabled: true,
+        autoFloatEnabled: true,
+        //initialFrameHeight:400,
+    });
+
+
+    //验证参数的合法性，为真才提交
+    function checkData(){
+        return true;
+    }
+
+
+    function delone(id) {
+        $.post("{:U('Admin/Index/saveInfo')}",{"id":id},function(data){
+            if(data.error_code==0){
+                swal({
+                            title: "Ok",
+                            text: data.message,
+                            type: "success",
+                            timer: 1000,
+                        },
+                        function(){
+                            location.href = data.url;
+                        });
+            }
+        });
+    }
+
+</script>
+<!--百度Ueditor注册完毕-->

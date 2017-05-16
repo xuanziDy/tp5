@@ -1,0 +1,83 @@
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Plugin/uploadify/uploadify.css">
+<script type="text/javascript" src="__PUBLIC__/Plugin/uploadify/jquery.uploadify.min.js"></script>
+
+<div class="col-sm-12 widget-container-span">
+    <div class="widget-box transparent">
+        <include file="_tab"/>
+
+        <div class="widget-body">
+            <div class="widget-main padding-12 no-padding-left no-padding-right">
+                <div class="tab-content padding-4">
+                    <div id="home2" class="tab-pane in active">
+                        <form class="form-horizontal ajax" enctype="multipart/form-data" id="myform" action="{:U('Admin/Video/save')}">
+
+                             <input type="hidden" name="id" id="id" value="{$info.id}">
+                             <input type="hidden" name="opmode"  value="{$opmode}">
+
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="tab-pane active">
+                                        <table cellpadding="2" cellspacing="2" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td>说明：</td>
+                                                <td> <input id="name" type="text" class="input col-sm-6" placeholder="请输入类似地址: https://www.youtube.com/watch?v=g4kjxgF7fkQ" disabled="true">
+                                                   
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td>地址:</td>
+                                                <td>
+                                                    <textarea id="addr" name="addr" rows="15" cols="80" >{$info.addr} </textarea>
+                                                    <span id="error_addr" style="color: red;padding-left:5px;"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>排序：</td>
+                                                <td> <input id="sort" type="text" name="sort" class="input col-sm-6" placeholder="请输入视频展示的先后顺序，例如：1" value="{$info.sort}">
+                                                </td>
+                                            </tr>
+                                      </tbody>
+                                      </table>
+                            </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary btn_submit J_ajax_submit_btn" >提交</button>
+                    <a class="btn" href="{:U('index')}">返回</a>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+    
+    /**
+     *  提交表单前，验证数据的合法性
+     */
+    function checkData(){
+
+        var addr_flag=false;
+        var addr =  $('#addr').val();
+        addr = $.trim(addr);
+        if(addr == null || addr == ''){
+            $('#error_addr').html('地址不能为空');
+        }else{
+            $('#error_addr').html('');
+            addr_flag=true;
+        }
+
+
+        if(addr_flag){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+</script>
+

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="cn">
+    <head>
+        <meta charset="UTF-8">
+        <title>{$title}</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <!-- basic styles -->
+        <link href="__PUBLIC__/Plugin/style/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="__PUBLIC__/Plugin/style/css/font-awesome.min.css" />
+
+        <!--[if IE 7]>
+          <link rel="stylesheet" href="__PUBLIC__/Plugin/style/css/font-awesome-ie7.min.css" />
+        <![endif]-->
+        <!-- ace styles -->
+        <link rel="stylesheet" href="__PUBLIC__/Plugin/style/css/ace.min.css" />
+        <link rel="stylesheet" href="__PUBLIC__/Plugin/style/css/ace-rtl.min.css" />
+        <link rel="stylesheet" href="__PUBLIC__/Plugin/style/css/ace-skins.min.css" />
+        <link rel="stylesheet" href="__PUBLIC__/Plugin/sweetalert/sweetalert.css" />
+        <link rel="stylesheet" href="__PUBLIC__/Plugin/preview/app.css">
+
+        <script src="__PUBLIC__/Plugin/style/js/ace-extra.min.js"></script>
+
+        <script type="text/javascript">
+            window.jQuery || document.write("<script src='__PUBLIC__/Plugin/style/js/jquery-2.0.3.min.js'>"+"<"+"/script>");
+        </script>
+
+        <script type="text/javascript">
+            if("ontouchend" in document) document.write("<script src='__PUBLIC__/Plugin/style/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+        </script>
+        <script src="__PUBLIC__/Plugin/style/js/bootstrap.min.js"></script>
+
+        <script src="__PUBLIC__/Plugin/style/js/jquery-ui-1.10.3.custom.min.js"></script>
+        <script src="__PUBLIC__/Plugin/style/js/jquery.slimscroll.min.js"></script>
+
+        <script src="__PUBLIC__/Plugin/style/js/ace-elements.min.js"></script>
+        <script src="__PUBLIC__/Plugin/style/js/ace.min.js"></script>
+
+        <script src="__PUBLIC__/Plugin/sweetalert/sweetalert.min.js"></script>
+    </head>
+    <body>
+        <div class="navbar navbar-default" style="background: black;" id="navbar">
+            <div class="navbar-container" id="navbar-container">
+                <div class="navbar-header pull-left">
+                    <a href="{:U('Admin/Index/password')}" class="navbar-brand">
+                        <small>后台管理</small>
+                    </a><!-- /.brand -->
+                </div><!-- /.navbar-header -->
+
+                <div class="navbar-header pull-right" role="navigation">
+                    <ul class="nav ace-nav">
+                        <li class="light-blue">
+                            <a data-toggle="dropdown" href="#" class="dropdown-toggle" style="background: #222;">
+                                <span class="user-info"><php>echo D("Admin/Admin")->getAdminName()</php></span>
+                                <i class="icon-caret-down"></i>
+                            </a>
+
+                            <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                                <li>
+                                    <a href="{:U('Admin/Login/logout')}">
+                                        <i class="icon-off"></i>注销
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul><!-- /.ace-nav -->
+                </div><!-- /.navbar-header -->
+            </div><!-- /.container -->
+        </div>
+        <div class="main-container" id="main-container">
+            <div class="main-container-inner">
+                <div class="sidebar" id="sidebar">
+                    <script type="text/javascript">
+                        try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+                    </script>
+
+                    <ul class="nav nav-list">
+                        <!--<li <eq name="main_menu" value="User">class="active"</eq>>-->
+                            <!--<a href="{:U('Admin/User/index')}">-->
+                                <!--<i class="icon-home"></i>-->
+                                <!--<span class="menu-text"> 用户管理 </span>-->
+                            <!--</a>-->
+                        <!--</li>-->
+
+                        <li <eq name="main_menu" value="Product">class="active"</eq>>
+                            <a href="{:U('Admin/Product/index')}">
+                                <i class="icon-home"></i>
+                                <span class="menu-text">产品管理 </span>
+                            </a>
+                        </li>
+
+                        <li <eq name="main_menu" value="Pic" style="display: none;">class="active"</eq>>
+                            <a href="{:U('Admin/Pic/index')}">
+                                <i class="icon-home"></i>
+                                <span class="menu-text">广告管理 </span>
+                            </a>
+                        </li>
+
+                        <li <eq name="main_menu" value="Equivment" style="display: none;">class="active"</eq>>
+                            <a href="{:U('Admin/Equivment/index')}">
+                                <i class="icon-home"></i>
+                                <span class="menu-text">设备管理 </span>
+                            </a>
+                        </li>
+                        <li <eq name="main_menu" value="Attribute" style="display: none;">class="active"</eq>>
+                            <a href="{:U('Admin/Attribute/index')}">
+                                <i class="icon-home"></i>
+                                <span class="menu-text">属性管理 </span>
+                            </a>
+                        </li>
+                        <li <eq name="main_menu" value="News" style="display: none;">class="active"</eq>>
+                        <a href="{:U('Admin/News/index')}">
+                            <i class="icon-home"></i>
+                            <span class="menu-text">新闻管理 </span>
+                        </a>
+                        </li>
+                        <li <eq name="main_menu" value="Video" style="display: none;">class="active"</eq>>
+                        <a href="{:U('Admin/Video/index')}">
+                            <i class="icon-home"></i>
+                            <span class="menu-text">视频管理 </span>
+                        </a>
+                        </li>
+                        <li <eq name="main_menu" value="Nodes">class="active"</eq>>
+                        <a href="{:U('Admin/Nodes/index')}">
+                            <i class="icon-home"></i>
+                            <span class="menu-text">邮件管理 </span>
+                        </a>
+                        </li>
+                        <li <eq name="main_menu" value="Index" style="display: none;">class="active"</eq>>
+                            <a href="{:U('Admin/Index/password')}">
+                                <i class="icon-home"></i>
+                                <span class="menu-text"> 设置 </span>
+                            </a>
+                        </li>
+                    </ul>
+                    <script type="text/javascript">
+                        try{ace.settings.check('sidebar' , 'collapsed')}catch(e){}
+                    </script>
+                </div>
+                <div class="main-content">
+                    <div class="breadcrumbs" id="breadcrumbs">
+                        <ul class="breadcrumb">
+                            <li>
+                                <i class="icon-home home-icon"></i>
+                                <a href="{$breadcrum_url}">{$breadcrum}</a>
+                            </li>
+                            <li class="active">{$title}</li>
+                        </ul>
+                    </div>
+                    <div id="content_main">
+                            {__CONTENT__}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        function showTips(s) {
+            swal({title: '', text: s, type: "warning"});
+        }
+        $("form.ajax").submit(function(){
+            if(checkData()){
+                var url = $(this).attr('action');
+                $.ajax({
+                    url:url,
+                    type:"post",
+                    data: $("form").serialize(),
+                    dataType: 'json',
+                    success:function(data){
+                        if (data.error_code==0) {
+                            swal({
+                                        title: "Ok",
+                                        text: data.message,
+                                        type: "success",
+                                        timer: 500,
+                                    },
+                                    function(){
+                                        location.href = data.url;
+                                    });
+                        } else {
+                            swal({
+                                title: 'Error',
+                                text: data.message,
+                                type: "error",
+                            });
+                        }
+                    },
+                });
+                return false;
+            } else {
+//                    alert('参数不完整');
+                   return false;
+            }
+        });
+    </script>
+</html>

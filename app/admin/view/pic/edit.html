@@ -1,0 +1,257 @@
+<link rel="stylesheet" type="text/css" href="__PUBLIC__/Plugin/uploadify/uploadify.css">
+<script type="text/javascript" src="__PUBLIC__/Plugin/uploadify/jquery.uploadify.min.js"></script>
+
+<div class="col-sm-12 widget-container-span">
+    <div class="widget-box transparent">
+        <include file="_tab"/>
+
+        <div class="widget-body">
+            <div class="widget-main padding-12 no-padding-left no-padding-right">
+                <div class="tab-content padding-4">
+                    <div id="home2" class="tab-pane in active">
+                        <form class="form-horizontal ajax" enctype="multipart/form-data" id="myform" action="{:U('Admin/Pic/save')}">
+
+                             <input type="hidden" name="id" id="id" value="{$info.id}">
+                             <input type="hidden" name="opmode"  value="{$opmode}">
+
+                            <div class="tabbable">
+                                <div class="tab-content">
+                                    <div class="tab-pane active">
+                                        <table cellpadding="2" cellspacing="2" width="100%">
+                                            <tbody>
+                                            <tr>
+                                                <td>广告位置: </td>
+                                                <td style="height:3em;">
+                                                    <div style="width:100%;">
+                                                        <div style="float:left;width:20%;">
+                                                            <input type="radio" class="input col-sm-2" name="pos" value="1"   <empty name="info">checked="checked"<else/><eq name="info.pos" value="1">checked="checked"</eq></empty>   >首页
+
+                                                        </div>
+
+                                                        <div style="float: left;width:20%;">
+                                                            <input type="radio" class="input col-sm-2" name="pos" value="2" <eq name="info.pos" value="2">checked="checked"</eq> > 产品分类页
+                                                        </div>
+                                                    </div>
+
+                                                    <!--<span id="error_sort" style="color: red;padding-left:5px;"></span>-->
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>水印: </td>
+                                                <td style="height:3em;">
+                                                    <div style="width:100%;">
+                                                        <div style="float:left;width:20%;">
+                                                            <input type="radio" class="input col-sm-2" name="water" value="2"   <empty name="info">checked="checked"<else/><eq name="info.water" value="2">checked="checked"</eq></empty>   >不需要
+
+                                                        </div>
+
+                                                        <div style="float: left;width:20%;">
+                                                            <input type="radio" class="input col-sm-2" name="water" value="1" <eq name="info.water" value="1">checked="checked"</eq> >需要
+                                                        </div>
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                             <tr>
+                                                <td>图片:</td>
+                                                <td>
+                                                <link rel="stylesheet" href="__PUBLIC__/admin/css/upload.css">
+                                                <div class="speechbox_add">
+                                                    <div class="uploadBox">
+                                                        <input type="hidden" name="img" id="img0_input" class="bg-input w229" value="{$info.img}"/>
+                                                        <input id="select_thumb" name="thumb" type="hidden" value="{$info.thumb}" />
+
+                                                        <div class="upload_area upload_unll">
+                                                            <div class="uImg uImg1" id="img0_divhide" <empty name="id">style="display: block;"<else/>style="display: none;"</empty> >
+                                                                <span class="op">
+                                                                    <input type="file" class="inputFile" id="img0_placeholder_0" />
+                                                                </span>
+                                                            </div>
+                                                            <div class="uImg uImg1" id="img0_divshow" <empty name="id">style="display: none;"<else/>style="display: block;"</empty>>
+                                                                <notempty name="info.id">
+                                                                    <img src="/Uploads/{$info.img}" />
+                                                                <else/>
+                                                                    <img src="">
+                                                                </notempty>
+
+                                                                <span class="op_2">
+                                                                    <input type="file" class="inputFile" id="img0_placeholder_1" /> | <a href="javascript:void(0)" onclick="deleteUpload('img0')">删除图片</a>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                               <span id="error_img" style="color: red;padding-left:5px;"></span>
+
+                                            </td>
+                                            </tr>
+                                            <tr>
+                                                <td>链接地址:</td>
+                                                <td> <input id="url" type="text" class="input col-sm-4" name="url" value="{$info.url|default='#'}" placeholder="完整的链接地址"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>文字描述:</td>
+                                                <td>
+                                                    <input id="title" type="text" class="input col-sm-4" name="title" value="{$info.title}" placeholder="">
+
+                                                </td>
+                                            </tr>
+                                      </tbody>
+                                      </table>
+                            </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button class="btn btn-primary btn_submit J_ajax_submit_btn" >提交</button>
+                    <a class="btn" href="{:U('Admin/Pic/index')}">返回</a>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+        var buttonsize_b = {
+            "width": 200,
+            "height": 200
+        };
+        var buttonsize_s = {
+            "width": 55,
+            "height": 19
+        };
+        $(function(){
+            specialUpload('img0_placeholder_0', buttonsize_b, 'img0', false, '');
+            specialUpload('img0_placeholder_1', buttonsize_s, 'img0', true, '');
+        });
+
+
+        function specialUpload(id, buttonsize, keyname, showtext, type) {
+            var textValue = (showtext) ? '重新上传' : '';
+            var swfu = new SWFUpload({
+                upload_start_handler:function(file){
+                    var url;
+
+                    var water = $("input[name='water']:checked").val();
+                    var pos = $("input[name='pos']:checked").val();
+                    if(water != 1) {
+                        water =2;
+                    }
+                    if(pos != 1) {
+                        pos =2;
+                    }
+
+                    url = "{:U('Admin/Pic/upload')}"+"/water/"+water+"/pos/"+pos;
+
+//                    url = "{:U('Admin/Pic/upload',array('water'=>"+water+",'pos'=>"+pos+"))}";
+
+//                    alert(url);
+                    this.setUploadURL(url);
+                },
+
+                file_types: "*.png;*.jpg;*.jpeg;*.bmp",
+                file_dialog_complete_handler: function(numFilesSelected, numFilesQueued) {
+                    try {
+                        if (numFilesQueued > 0) {
+                            this.startUpload();
+                        }
+                    } catch (ex) {
+                        ui.error(ex)
+                    }
+                },
+                //选择文件的前置操作
+                file_dialog_start_handler: function() {},
+                use_query_string:false,
+                //选择的文件
+                file_queued_handler: function(file) {},
+                //选择不合规范的文件
+                file_queue_error_handler: function(file, errCode, errMsg) {
+                    if (errCode == -110) {
+                        if (errCode == -110) {
+                            alert('请选择不超过 10M大小的图片');
+                        }
+                        if (errCode == -120) {
+                            alert('图片尺寸不合适，请重新选择');
+                        }
+                    }
+
+                },
+                upload_progress_handler: function(file, bytesLoaded) {
+                    var percent = Math.ceil((bytesLoaded / file.size) * 100);
+                    //ui.error(percent);
+                    //alert(percent)
+                },
+                upload_error_handler: function(file, errorCode, message) {
+                 alert(message)
+                   // ui.error(message);
+                },
+                upload_success_handler: function(file, serverData) {
+                    var data = jQuery.parseJSON(serverData);
+
+                    if (data.error == 0) {
+                        // img0_input
+                        $("#" + keyname + '_input').val(data.img);
+                        $("#" + keyname + '_divhide').hide();
+                        $("#" + keyname + '_divshow').show();
+                        $("#" + keyname + '_divshow').find('img').attr("src", data.url);
+                        $("#select_thumb").val(data.thumb);
+                        console.log(data);
+                        //return;
+                    } else {
+                        alert(data.message);
+                    }
+                },
+                upload_complete_handler: function(file) {},
+                button_placeholder_id: id,
+                button_text: textValue,
+                file_size_limit: 1024*10,
+                //button_text_style:'color: #000000; font-size: 16pt;',
+                button_width: buttonsize.width,
+                button_height: buttonsize.height,
+                button_window_mode: SWFUpload.WINDOW_MODE.TRANSPARENT,
+                button_cursor: SWFUpload.CURSOR.HAND,
+                flash_url: "/Public/Plugin/uploadify/uploadify.swf",
+                debug: false
+            });
+        }
+        //删除上传图片
+        function deleteUpload(keyname) {
+            $("#" + keyname + '_divshow').find('img').attr('src', '');
+            $("#" + keyname + '_divshow').hide();
+            $("#" + keyname + '_divhide').show();
+            $("#" + keyname + '_input').val('');
+            $("#select_thumb").val('');
+        }
+    /**
+     *  提交表单前，验证数据的合法性
+     */
+    function checkData(){
+
+        //图片
+        var image_flag=false;
+        var image =  $('input[name="img"]').val();
+        if(image == null || image == ''){
+            $('#error_img').html('图片不能为空');
+        }else{
+            $('#error_img').html('');
+            image_flag=true;
+        }
+       //标题
+//        var title_flag=false;
+//        var title =  $('input[name="title"]').val();
+//        if(title == null || title == ''){
+//            $('#error_title').html('标题不能为空');
+//        }else{
+//            $('#error_title').html('');
+//            title_flag=true;
+//        }
+        if(image_flag ){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+</script>
+
